@@ -76,13 +76,13 @@ public class ChatClient {
                 if (line.startsWith("SUBMITNAME")) {
                     out.println(getName());
                 } else if (line.startsWith("NAMEACCEPTED")) {
-                    this.frame.setTitle("Chatter g - " + line.substring(13));
+                    this.frame.setTitle("Pessoa - " + line.substring(13));
                     textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
-                    //messageArea.setForeground(Color.RED);
+                    messageArea.setForeground(Color.RED);
                     messageArea.append(line.substring(8) + "\n");
                 } else if (line.startsWith("SYSTEM")) {
-                    //messageArea.setForeground(Color.BLACK);
+                    messageArea.setForeground(Color.BLACK);
                     messageArea.append("[Sistema] " + line.substring(7) + "\n");
                 }
             }
