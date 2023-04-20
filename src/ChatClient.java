@@ -6,11 +6,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 /**
  * A simple Swing-based client for the chat server. Graphically it is a frame
@@ -33,7 +33,16 @@ public class ChatClient {
     PrintWriter out;
     JFrame frame = new JFrame("Chatter");
     JTextField textField = new JTextField(50);
-    JTextArea messageArea = new JTextArea(16, 50);
+    JTextPane messageArea = new JTextPane();
+
+    StyledDocument doc = messageArea.getStyledDocument();
+
+    // Crie um estilo para mensagens do sistema
+    Style systemStyle = doc.addStyle("systemStyle", null);
+
+
+    // Crie um estilo para mensagens de usuário
+    Style userStyle = doc.addStyle("userStyle", null);
 
     /**
      * Constructs the client by laying out the GUI and registering a listener with
@@ -50,6 +59,9 @@ public class ChatClient {
         frame.getContentPane().add(textField, BorderLayout.SOUTH);
         frame.getContentPane().add(new JScrollPane(messageArea), BorderLayout.CENTER);
         frame.pack();
+
+        StyleConstants.setForeground(systemStyle, Color.BLACK);
+        StyleConstants.setForeground(userStyle, Color.RED);
 
         // Send on enter then clear to prepare for next message
         textField.addActionListener(new ActionListener() {
@@ -79,13 +91,17 @@ public class ChatClient {
                     this.frame.setTitle("Pessoa - " + line.substring(13));
                     textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
-                    messageArea.setForeground(Color.RED);
-                    messageArea.append(line.substring(8) + "\n");
+                    //messageArea.setForeground(Color.RED);
+                    doc.insertString(doc.getLength(), line.substring(8) + "\n", userStyle);
+                    //messageArea.append(line.substring(8) + "\n");
                 } else if (line.startsWith("SYSTEM")) {
-                    messageArea.setForeground(Color.BLACK);
-                    messageArea.append("[Sistema] " + line.substring(7) + "\n");
+                    //messageArea.setForeground(Color.BLACK);
+                    doc.insertString(doc.getLength(), "[Sistema] " + line.substring(7) + "\n", systemStyle);
+                    //messageArea.append("[Sistema] " + line.substring(7) + "\n");
                 }
             }
+        } catch (BadLocationException e) {
+            throw new RuntimeException(e);
         } finally {
             frame.setVisible(false);
             frame.dispose();
