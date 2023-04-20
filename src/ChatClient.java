@@ -33,16 +33,16 @@ public class ChatClient {
     PrintWriter out;
     JFrame frame = new JFrame("Chatter");
     JTextField textField = new JTextField(50);
+
+    //Mudança para JTextPane
     JTextPane messageArea = new JTextPane();
 
+    // Criação dos estilos de texto
     StyledDocument doc = messageArea.getStyledDocument();
 
-    // Crie um estilo para mensagens do sistema
+
     Style systemStyle = doc.addStyle("systemStyle", null);
-
-
-    // Crie um estilo para mensagens de usuário
-    Style userStyle = doc.addStyle("userStyle", null);
+    Style messageStyle = doc.addStyle("messageStyle", null);
 
     /**
      * Constructs the client by laying out the GUI and registering a listener with
@@ -60,8 +60,9 @@ public class ChatClient {
         frame.getContentPane().add(new JScrollPane(messageArea), BorderLayout.CENTER);
         frame.pack();
 
+        /*As cores que vao ser colocadas no texto*/
         StyleConstants.setForeground(systemStyle, Color.BLACK);
-        StyleConstants.setForeground(userStyle, Color.RED);
+        StyleConstants.setForeground(messageStyle, Color.RED);
 
         // Send on enter then clear to prepare for next message
         textField.addActionListener(new ActionListener() {
@@ -91,13 +92,11 @@ public class ChatClient {
                     this.frame.setTitle("Pessoa - " + line.substring(13));
                     textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
-                    //messageArea.setForeground(Color.RED);
-                    doc.insertString(doc.getLength(), line.substring(8) + "\n", userStyle);
-                    //messageArea.append(line.substring(8) + "\n");
+                    //Inserindo a mensagem no texto com o estilo selecionado
+                    doc.insertString(doc.getLength(), line.substring(8) + "\n", messageStyle);
                 } else if (line.startsWith("SYSTEM")) {
-                    //messageArea.setForeground(Color.BLACK);
+                    //Inserindo a mensagem no texto com o estilo selecionado
                     doc.insertString(doc.getLength(), "[Sistema] " + line.substring(7) + "\n", systemStyle);
-                    //messageArea.append("[Sistema] " + line.substring(7) + "\n");
                 }
             }
         } catch (BadLocationException e) {
