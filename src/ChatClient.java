@@ -13,6 +13,8 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+/*Comentario*/
+
 /**
  * A simple Swing-based client for the chat server. Graphically it is a frame
  * with a text field for entering messages and a textarea to see the whole
